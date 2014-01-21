@@ -13,7 +13,7 @@ def sentences(s):
     """Split the string s into a list of sentences."""
     try: s+""
     except: raise TypeError, "s must be a string"
-    s = u"".join(splitChinese(s))
+    s = u" ".join(splitChinese(s))
     pos = 0
     sentenceList = []
     l = len(s)
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     # sentences
     sents = sentences("First.  Second, still?  Third and Final!  Well, not really")
     print sents
-    sents = sentences(u'2005年我们出去玩2，然后聘情况！知道道理5abc如何走。')
+    sents = sentences(u'_2005年我们出去玩2，_ 然后聘情况！知道道理5abc如何走*。这么说不 *')
     for s in sents:
         print s, ' / ',
     #assert(len(sents) == 4)

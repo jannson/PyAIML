@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import re
 from crfseg import Tagger
 
 #TODO can only run in single thread
@@ -27,11 +28,15 @@ tok_map = {}
 tok_map[u'？'] = '?'
 tok_map[u'。'] = '.'
 tok_map[u'！'] = '!'
+space_regex = re.compile('[\s\t\r\n]+', re.I|re.U)
 def splitChinese(s):
 
     result = []
     tmp = u''
     for c in tagger.cut(s):
+        if space_regex.search(c):
+            continue
+        #print c, ' C'
         if len(tmp)>0 and (len(c)>1 or isChinese(c)):
             result.append(tmp)
             tmp = u''
@@ -81,7 +86,7 @@ def mergeChineseSpace(s):
 
 # Self test
 if __name__ == "__main__":
-    ss = splitChinese(u'2005年我们出去玩2，然后聘情况！知道道理5abc如何走。这么说不 *')
+    ss = splitChinese(u'_2005年我们出去玩2，_ 然后聘情况！知道道理5abc如何走*。这么说不 *')
     for sss in ss:
         print sss,"/",
     print '\n'
