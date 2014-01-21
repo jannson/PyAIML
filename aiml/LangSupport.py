@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from crfseg import Tagger
+
+#TODO can only run in single thread
+tagger = Tagger()
 
 def isChinese(c):
     # http://www.iteye.com/topic/558050
@@ -18,18 +22,33 @@ def isChinese(c):
         (0x31C0, 0x31EF)]
     return any(s <= ord(c) <= e for s, e in r)
 
+
+tok_map = {}
+tok_map[u'？'] = '?'
+tok_map[u'。'] = '.'
+tok_map[u'！'] = '!'
 def splitChinese(s):
 
     result = []
-    for c in s:
-        if isChinese(c):
-            result.extend([" ", c, " "])
-        else:
+    tmp = u''
+    for c in tagger.cut(s):
+        if len(tmp)>0 and (len(c)>1 or isChinese(c)):
+            result.append(tmp)
+            tmp = u''
+        if len(c) > 1:
             result.append(c)
-    ret = ''.join(result)
-    return ret.split()
+        else:
+            if c in tok_map:
+                c = tok_map[c]
+            if not isChinese(c):
+                tmp += c
+            else:
+                result.append(c)
+    if len(tmp) > 0:
+        result.append(tmp)
+    return result
 
-
+'''
 def splitUnicode(s):
     assert type(s) == unicode, "string must be a unicode"
     segs = s.split()
@@ -40,6 +59,7 @@ def splitUnicode(s):
         else:
             result.append(seg)
     return result
+'''
 
 def mergeChineseSpace(s):
     assert type(s) == unicode, "string must be a unicode"
@@ -58,3 +78,11 @@ def mergeChineseSpace(s):
         except:
             pass
     return u''.join(result).strip()
+
+# Self test
+if __name__ == "__main__":
+    ss = splitChinese(u'2005年我们出去玩2，然后聘情况！知道道理5abc如何走。这么说不 *')
+    for sss in ss:
+        print sss,"/",
+    print '\n'
+    print mergeChineseSpace(u"".join(ss))

@@ -13,6 +13,7 @@ def sentences(s):
     """Split the string s into a list of sentences."""
     try: s+""
     except: raise TypeError, "s must be a string"
+    s = u"".join(splitChinese(s))
     pos = 0
     sentenceList = []
     l = len(s)
@@ -23,17 +24,22 @@ def sentences(s):
         except: q = l+1
         try: e = s.index('!', pos)
         except: e = l+1
-        end = min(p,q,e)
+        try: f = s.index('~', pos)
+        except: f = l+1
+        end = min(p,q,e,f)
         sentenceList.append( s[pos:end].strip() )
         pos = end+1
     # If no sentences were found, return a one-item list containing
     # the entire input string.
     if len(sentenceList) == 0: sentenceList.append(s)
-    # auto convert chinese
-    return map(lambda s: u' '.join(splitChinese(s)), sentenceList)
+    return sentenceList
 
 # Self test
 if __name__ == "__main__":
     # sentences
     sents = sentences("First.  Second, still?  Third and Final!  Well, not really")
-    assert(len(sents) == 4)
+    print sents
+    sents = sentences(u'2005年我们出去玩2，然后聘情况！知道道理5abc如何走。')
+    for s in sents:
+        print s, ' / ',
+    #assert(len(sents) == 4)
