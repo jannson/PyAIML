@@ -28,7 +28,9 @@ category_template = """
 </category>
 """
 
-#print sys.argv
+print 'argv'
+for v in sys.argv:
+    print v, '/', 
 if len(sys.argv) == 3:
     _, rule, temp = sys.argv
     rule = mergeChineseSpace(unicode(rule, 'utf8')).encode('utf8')

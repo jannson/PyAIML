@@ -304,6 +304,9 @@ class Kernel:
                 continue
             # store the pattern/template pairs in the PatternMgr.
             for key,tem in handler.categories.items():
+                #DEBUG jannson 26/01/14 11:00:14
+                #print 'KEY: ', unicode(str(key), 'unicode-escape'), 
+                #print 'TEM: ', unicode(str(tem), 'unicode-escape')
                 self._brain.add(key,tem)
             # Parsing was successful.
             if self._verboseMode:
@@ -383,6 +386,8 @@ class Kernel:
 
         # run the input through the 'normal' subber
         subbedInput = self._subbers['normal'].sub(input)
+        # EDITED jannson
+        print subbedInput
 
         # fetch the bot's previous response, to pass to the match()
         # function as 'that'.

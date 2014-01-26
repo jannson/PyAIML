@@ -1,4 +1,6 @@
 import sys
+import codecs
+
 sys.path.insert(0, "../")
 
 import aiml
@@ -19,6 +21,11 @@ k.learn("cn-startup.xml")
 # the interpreter's response, which in this case
 # we ignore.
 k.respond("load aiml cn")
+
+print 'begin dumps'
+str_out = k._brain.dump()
+with codecs.open('dump.zzz', 'w', 'utf-8') as file:
+    file.write(unicode(str_out, 'unicode-escape'))
 
 # Loop forever, reading user input from the command
 # line and printing responses.

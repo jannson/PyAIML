@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from LangSupport import splitChinese
+from LangSupport import splitChinese, normalChinese
 
 """This file contains assorted general utility functions used by other
 modules in the PyAIML package.
@@ -14,6 +14,8 @@ def sentences(s):
     try: s+""
     except: raise TypeError, "s must be a string"
     s = u" ".join(splitChinese(s))
+    #TODO do better for normalChinese
+    s = normalChinese(s)
     pos = 0
     sentenceList = []
     l = len(s)

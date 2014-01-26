@@ -33,6 +33,7 @@ def splitChinese(s):
 
     result = []
     tmp = u''
+    #for c in tagger.cut_syno(s):
     for c in tagger.cut(s):
         if space_regex.search(c):
             continue
@@ -52,6 +53,9 @@ def splitChinese(s):
     if len(tmp) > 0:
         result.append(tmp)
     return result
+
+def normalChinese(s):
+    return u' '.join(list(tagger.normal_words(s.split())))
 
 '''
 def splitUnicode(s):
@@ -87,7 +91,6 @@ def mergeChineseSpace(s):
 # Self test
 if __name__ == "__main__":
     ss = splitChinese(u'_2005年我们出去玩2，_ 然后聘情况！知道道理5abc如何走*。这么说不 *')
-    for sss in ss:
-        print sss,"/",
-    print '\n'
+    norss = normalChinese(u' '.join(ss))
+    print norss
     print mergeChineseSpace(u"".join(ss))
